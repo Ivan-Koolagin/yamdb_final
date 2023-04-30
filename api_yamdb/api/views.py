@@ -127,7 +127,7 @@ class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 
     def get_queryset(self):
-        return queryset = Title.objects.annotate(
+        return Title.objects.annotate(
             rating=Avg('reviews__score')).order_by('-id')
 
     def get_serializer_class(self):
