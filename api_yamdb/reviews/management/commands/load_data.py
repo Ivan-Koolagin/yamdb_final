@@ -64,7 +64,9 @@ def process_file(csv_file, model):
 
 def process_genre_title():
     with open(
-        os.path.join(BASE_DIR, "static/data/genre_title.csv"), "rt", encoding="utf8"
+        os.path.join(BASE_DIR, "static/data/genre_title.csv"),
+            "rt",
+            encoding="utf8"
     ) as f:
         reader = csv.reader(f, dialect="excel")
         next(reader)
