@@ -2,6 +2,7 @@ from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
 from django.db.models import Avg
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, permissions, status, viewsets
@@ -9,10 +10,9 @@ from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
-from django.db import IntegrityError
-
 from reviews.models import Category, Genre, Review, Title
 from users.models import User
+
 from .permissions import (IsAdmin, IsAdminModeratorOwnerOrReadOnly,
                           IsAdminOrReadOnly)
 from .serializers import (CategorySerializer, CommentsSerializer,
@@ -59,29 +59,29 @@ def self_registration(request):
             serializer.errors, status=status.HTTP_400_BAD_REQUEST
         )
 #    elif serializer.is_valid(raise_exception=True):
-    else:
-        try:
-            user, _ = User.objects.get_or_create(
-                username=serializer.validated_data.get('username'),
-                email=serializer.validated_data.get('email')
-            )
-        except IntegrityError:
-            return Response(
-                settings.EMAIL_EXISTS if
-                User.objects.filter(username='username').exists()
-                else settings.NAME_EXISTS,
-                status.HTTP_400_BAD_REQUEST
-            )
-        code = default_token_generator.make_token(user)
-        send_mail(
-            'Код токена',
-            f'Код для получения токена {code}',
-            settings.DEFAULT_FROM_EMAIL,
-            [serializer.validated_data.get('email')]
+
+    try:
+        user, _ = User.objects.get_or_create(
+            username=serializer.validated_data.get('username'),
+            email=serializer.validated_data.get('email')
         )
+    except IntegrityError:
         return Response(
-            serializer.data, status=status.HTTP_200_OK
+            settings.EMAIL_EXISTS if
+            User.objects.filter(username='username').exists()
+            else settings.NAME_EXISTS,
+            status.HTTP_400_BAD_REQUEST
         )
+    code = default_token_generator.make_token(user)
+    send_mail(
+        'Код токена',
+        f'Код для получения токена {code}',
+        settings.DEFAULT_FROM_EMAIL,
+        [serializer.validated_data.get('email')]
+    )
+    return Response(
+        serializer.data, status=status.HTTP_200_OK
+    )
 
 
 @api_view(["POST"])
@@ -129,7 +129,6 @@ class TitleViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return Title.objects.annotate(
             rating=Avg('reviews__score')).order_by('-id')
-
 
     def get_serializer_class(self):
         if self.request.method == 'GET':

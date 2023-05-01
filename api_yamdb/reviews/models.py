@@ -1,9 +1,9 @@
 from django.conf import settings
-from django.db import models
 from django.core.validators import (MaxValueValidator,
                                     MinValueValidator,
                                     validate_slug)
 from users.models import User
+from django.db import models
 
 from .validators import validate_year
 
