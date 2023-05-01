@@ -1,4 +1,3 @@
-from django.db import IntegrityError
 from django.conf import settings
 from django.contrib.auth.tokens import default_token_generator
 from django.core.mail import send_mail
@@ -12,6 +11,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
 from reviews.models import Category, Genre, Review, Title
 from users.models import User
+from django.db import IntegrityError
 
 from .filters import TitleFilter
 from .mixins import CDLSet
