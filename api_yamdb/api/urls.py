@@ -1,7 +1,9 @@
 
-from .views import (CategoryViewSet, CommentsViewSet, GenreViewSet,
+from .views import (
+                    CategoryViewSet, CommentsViewSet, GenreViewSet,
                     ReviewViewSet, TitleViewSet, UserViewSet,
-                    email_verifications, self_registration)
+                    email_verifications, self_registration
+                   )
 from rest_framework import routers
 from django.urls import include, path
 
