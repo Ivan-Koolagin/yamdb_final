@@ -1,7 +1,7 @@
 import csv
 
 from django.core.management.base import BaseCommand
-from reviews.models import Title, Category
+from reviews.models import Category, Title
 
 PATH = "static/data/"
 
@@ -18,6 +18,9 @@ class Command(BaseCommand):
                 print(row)
 
                 title = Title(
-                    id=row[0], name=row[1], year=row[2], category=Category(pk=row[3])
+                    id=row[0],
+                    name=row[1],
+                    year=row[2],
+                    category=Category(pk=row[3])
                 )
                 title.save()
