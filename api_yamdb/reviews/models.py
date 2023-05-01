@@ -1,14 +1,14 @@
 from django.conf import settings
+from django.db import models
 from django.core.validators import (MaxValueValidator,
                                     MinValueValidator,
                                     validate_slug)
-from django.db import models
 from users.models import User
 
 from .validators import validate_year
 
 
-class Genre_CategoryModel(models.Model):
+class GenreCategoryModel(models.Model):
     slug = models.SlugField(
         'Slug',
         max_length=settings.LENG_SLUG,
@@ -28,15 +28,15 @@ class Genre_CategoryModel(models.Model):
         return self.name[:settings.LENG_CUT]
 
 
-class Category(Genre_CategoryModel):
-    class Meta(Genre_CategoryModel.Meta):
+class Category(GenreCategoryModel):
+    class Meta(GenreCategoryModel.Meta):
         verbose_name = 'Категория'
         verbose_name_plural = 'Категории'
         default_related_name = 'categories'
 
 
-class Genre(Genre_CategoryModel):
-    class Meta(Genre_CategoryModel.Meta):
+class Genre(GenreCategoryModel):
+    class Meta(GenreCategoryModel.Meta):
         verbose_name = 'Жанр'
         verbose_name_plural = 'Жанры'
         default_related_name = 'genres'

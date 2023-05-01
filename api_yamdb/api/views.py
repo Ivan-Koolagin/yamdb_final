@@ -10,6 +10,9 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import AccessToken
 from django.db import IntegrityError
+
+from reviews.models import Category, Genre, Review, Title
+from users.models import User
 from .permissions import (IsAdmin, IsAdminModeratorOwnerOrReadOnly,
                           IsAdminOrReadOnly)
 from .serializers import (CategorySerializer, CommentsSerializer,
@@ -19,8 +22,6 @@ from .serializers import (CategorySerializer, CommentsSerializer,
                           TitlePostSerializer, UserSerializer)
 from .filters import TitleFilter
 from .mixins import CDLSet
-from reviews.models import Category, Genre, Review, Title
-from users.models import User
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -57,7 +58,8 @@ def self_registration(request):
         return Response(
             serializer.errors, status=status.HTTP_400_BAD_REQUEST
         )
-    elif serializer.is_valid(raise_exception=True):
+#    elif serializer.is_valid(raise_exception=True):
+    else:
         try:
             user, _ = User.objects.get_or_create(
                 username=serializer.validated_data.get('username'),
@@ -125,9 +127,9 @@ class TitleViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAdminOrReadOnly,)
 
     def get_queryset(self):
-        queryset = Title.objects.annotate(
+        return Title.objects.annotate(
             rating=Avg('reviews__score')).order_by('-id')
-        return queryset
+
 
     def get_serializer_class(self):
         if self.request.method == 'GET':
@@ -143,8 +145,7 @@ class ReviewViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         title_id = self.kwargs.get('title_id')
         titles = get_object_or_404(Title, pk=title_id)
-        queryset = titles.reviews.all()
-        return queryset
+        return titles.reviews.all()
 
     def perform_create(self, serializer):
         title_id = self.kwargs.get('title_id')
@@ -156,14 +157,21 @@ class CommentsViewSet(viewsets.ModelViewSet):
     serializer_class = CommentsSerializer
     permission_classes = [IsAdminModeratorOwnerOrReadOnly]
 
+    # def get_queryset(self):
+    #     review = get_object_or_404(
+    #         Review,
+    #         id=self.kwargs.get('review_id'),
+    #         title__id=self.kwargs.get('title_id')
+    #     )
+    #     if review is not None:
+    #         return review.comments.all()
     def get_queryset(self):
         review = get_object_or_404(
             Review,
             id=self.kwargs.get('review_id'),
             title__id=self.kwargs.get('title_id')
         )
-        if review is not None:
-            return review.comments.all()
+        return review.comments.all()
 
     def perform_create(self, serializer):
         review = get_object_or_404(
