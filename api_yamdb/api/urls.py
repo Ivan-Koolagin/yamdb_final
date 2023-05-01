@@ -1,8 +1,9 @@
+
 from .views import (CategoryViewSet, CommentsViewSet, GenreViewSet,
                     ReviewViewSet, TitleViewSet, UserViewSet,
                     email_verifications, self_registration)
-from django.urls import include, path
 from rest_framework import routers
+from django.urls import include, path
 
 router_v1 = routers.DefaultRouter()
 router_v1.register("users", UserViewSet)
