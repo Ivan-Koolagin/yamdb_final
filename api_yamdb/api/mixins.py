@@ -1,6 +1,10 @@
-from rest_framework.mixins import CreateModelMixin, DestroyModelMixin, ListModelMixin
-from rest_framework.viewsets import GenericViewSet
+from rest_framework import mixins, viewsets
 
 
-class CDLSet(CreateModelMixin, ListModelMixin, DestroyModelMixin, GenericViewSet):
+class CreateDestroyListViewSet(
+    mixins.CreateModelMixin,
+    mixins.DestroyModelMixin,
+    mixins.ListModelMixin,
+    viewsets.GenericViewSet,
+):
     pass
