@@ -4,9 +4,9 @@ from typing import List
 
 from django.core.management import BaseCommand, CommandError
 from django.shortcuts import get_object_or_404
-from api_yamdb.settings import BASE_DIR
 from reviews.models import Category, Comment, Genre, GenreTitle, Review, Title
 from users.models import User
+from api_yamdb.settings import BASE_DIR
 
 CSV_FILES = (
     ('users.csv', User),
