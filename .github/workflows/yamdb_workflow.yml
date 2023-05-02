@@ -45,7 +45,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/api_yamdb:latest
+          tags: ivankool/api_yamdb:latest
 
 #  deploy:
 #    runs-on: ubuntu-latest
