@@ -46,6 +46,7 @@ jobs:
         with:
           push: true
           tags: ivankool/api_yamdb:latest
+          file: api_yamdb/Dockerfile
 
 #  deploy:
 #    runs-on: ubuntu-latest
