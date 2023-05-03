@@ -64,6 +64,7 @@ jobs:
 #            #остановка всех контейнеров
 #            sudo docker stop $(sudo docker ps -a -q)
 #            sudo docker run --rm -d -p 5000:5000 ivankool/api_yamdb
+
           script: |
             sudo docker-compose stop
             sudo docker-compose rm web
@@ -75,6 +76,7 @@ jobs:
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
             sudo docker-compose up -d
+
 #  send_message:
 #    runs-on: ubuntu-latest
 #    needs: deploy
@@ -85,3 +87,4 @@ jobs:
 #          to: ${{ secrets.TELEGRAM_TO }}
 #          token: ${{ secrets.TELEGRAM_TOKEN }}
 #          message: ${{ github.workflow }} успешно выполнен!
+
