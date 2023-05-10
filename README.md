@@ -73,3 +73,6 @@ docker-compose down -v
 ### Работу выполнил:
 [Кулагин Иван](https://github.com/Ivan-Koolagin) - Email - ```ivkulagin@gmail.com```
 
+[Данные для подключения к ВМ](http://84.252.131.104/admin/) 
+
+логин/пароль: kali 
